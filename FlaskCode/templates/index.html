@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Receipts Extraction</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f5f5f5; /* added background color */
+		}
+		
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+		}
+		
+		form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 50px;
+		}
+		
+		input[type="radio"], input[type="file"], input[type="submit"], input[type="text"] {
+			margin: 10px;
+			padding: 10px;
+			background-color: #4CAF50; /* changed button color */
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+		
+		input[type="radio"]:hover, input[type="file"]:hover, input[type="submit"]:hover, input[type="text"]:hover {
+			background-color: #3e8e41; /* added hover effect for buttons */
+		}
+		
+		.table-container {
+			margin-top: 50px;
+		}
+		
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			margin: 0 auto;
+			margin-bottom: 50px;
+		}
+		
+		th, td {
+			text-align: left;
+			padding: 8px;
+		}
+		
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+		
+		th {
+			background-color: #4CAF50;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<h1>Analysis of Payment Bill</h1>
+	<form action="/" method="POST" enctype="multipart/form-data">
+		<input type="radio" name="input" value="file" checked> Upload a file<br>
+		<input type="file" name="file"><br>
+		<input type="radio" name="input" value="folder"> Upload a folder<br>
+		<input type="text" name="path" placeholder='Enter folder path:'><br>
+		
+		<input type="submit" value="Extract Data">
+	</form>
+	
+	<form action="/download_csv" method="post">
+		<input type="hidden" name="csv_data" value="{{ csv_data }}">
+		<button type="submit" class="btn btn-primary">Download CSV</button>
+	  </form>
+	  
+	
+    {% if data %}
+    <div class="table-container">
+        <h2>Receipts Data</h2>
+        {{ data|safe }}
+    </div>
+    {% endif %}
+    <script>
+		const folderRadioButton = document.querySelector('input[value="folder"]');
+	const fileRadioButton = document.querySelector('input[value="file"]');
+	const folderInput = document.querySelector('input[name="path"]');
+	const fileInput = document.querySelector('input[type="file"]');
+
+	folderInput.disabled = true;
+	fileInput.addEventListener('change', () => {
+	if (fileInput.files.length > 0) {
+	folderRadioButton.disabled = true;
+	folderInput.disabled = true;
+	} else {
+	folderRadioButton.disabled = false;
+	folderInput.disabled = folderRadioButton.checked ? false : true;
+	}
+	});
+
+	folderRadioButton.addEventListener('click', () => {
+	folderInput.disabled = false;
+	fileInput.value = '';
+	fileRadioButton.checked = false;
+	});
+
+	fileRadioButton.addEventListener('click', () => {
+	folderInput.disabled = true;
+	folderInput.value = '';
+	folderRadioButton.checked = false;
+	});
+	</script>
+</body>
+</html>

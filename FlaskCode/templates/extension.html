@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Receipt Parser</title>
+</head>
+<body>
+    <h1>Receipt Parser</h1>
+    <form method="POST" action="/extract_data" enctype="multipart/form-data">
+        <label for="file">Upload file:</label>
+        <input type="file" name="file"><br><br>
+        <label for="folder">Upload folder:</label>
+        <input type="file" name="folder" webkitdirectory directory multiple><br><br>
+        <input type="submit" value="Extract data">
+    </form>
+</body>
